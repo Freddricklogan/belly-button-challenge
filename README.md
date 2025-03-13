@@ -1,6 +1,6 @@
 # Belly Button Biodiversity Dashboard
 
-![Dashboard Preview](images/screenshots/dashboard_main.png)
+<img src="images/bacteria.jpg" alt="Portfolio Overview" width="65%">
 
 ## Overview
 This interactive dashboard visualizes the microbial species found in human navels. The dataset reveals that a small number of microbial species are present in more than 70% of people, while the rest are relatively rare.
