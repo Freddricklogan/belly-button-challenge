@@ -5,6 +5,8 @@
 ## Overview
 This interactive dashboard visualizes the microbial species found in human navels. The dataset reveals that a small number of microbial species are present in more than 70% of people, while the rest are relatively rare.
 
+- [Load Sample Data](https://freddricklogan.github.io/belly-button-challenge/) - Load the sample data to compare microbial species.
+
 ## Features
 - Interactive dropdown selection to view different sample data
 - Multiple visualizations including bar charts, bubble charts, and gauge charts
