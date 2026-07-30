@@ -1,20 +1,56 @@
-.jumbotron {
-    padding: 2rem;
-    background-color: #f8f9fa;
-    margin-bottom: 2rem;
-    border-radius: 0.5rem;
+:root{
+  --bg:#071f1f; --bg2:#0b2b2b; --panel:#0f3a38; --panel2:#103e3c;
+  --line:rgba(64,224,192,.18); --accent:#40e0c0; --accent2:#2bb39a;
+  --ink:#e8f5f2; --muted:#8fb3ad;
 }
+*{box-sizing:border-box}
+body{
+  margin:0;background:
+    radial-gradient(1100px 500px at 85% -10%,rgba(64,224,192,.10),transparent),
+    linear-gradient(170deg,#061a1a,#071f1f 45%,#0a2726);
+  color:var(--ink);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;min-height:100vh}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 
-.card {
-    margin-bottom: 1.5rem;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    border-radius: 0.5rem;
-}
+.app-header{border-bottom:1px solid var(--line);background:rgba(7,31,31,.6);backdrop-filter:blur(8px);
+  position:sticky;top:0;z-index:10}
+.app-header__inner{max-width:1500px;margin:0 auto;padding:16px 24px;display:flex;justify-content:space-between;
+  align-items:center;flex-wrap:wrap;gap:12px}
+.app-header__brand{display:flex;align-items:center;gap:14px}
+.app-header__brand h1{font-size:1.5rem;margin:0;letter-spacing:.3px}
+.app-header__brand p{margin:2px 0 0;color:var(--muted);font-size:.9rem}
+.app-header__meta{display:flex;gap:8px;flex-wrap:wrap}
+.pill{font-size:.74rem;border:1px solid var(--line);color:var(--accent);background:rgba(64,224,192,.06);
+  padding:5px 11px;border-radius:20px}
 
-.chart-card {
-    min-height: 400px;
-}
+.app-main{max-width:1500px;margin:0 auto;padding:24px}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.toolbar__hint{color:var(--muted);margin:0;font-size:.95rem}
+.toolbar__actions{display:flex;align-items:center;gap:12px}
+.btn-accent{background:var(--accent);color:#062020;border:none;font-weight:700;padding:10px 20px;border-radius:9px;
+  transition:.2s}
+.btn-accent:hover{background:var(--accent2);color:#062020;box-shadow:0 6px 20px rgba(64,224,192,.35)}
+.text-accent{color:var(--accent)!important}
 
-#loadingIndicator {
-    margin: 0 auto;
+.panel{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);
+  border-radius:16px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.25);margin-bottom:24px}
+.panel__head{padding:15px 20px;border-bottom:1px solid var(--line);
+  background:linear-gradient(90deg,rgba(64,224,192,.10),transparent)}
+.panel__head h2{margin:0;font-size:1rem;font-weight:700;color:var(--accent);letter-spacing:.3px}
+.panel__body{padding:18px 20px}
+.panel__body#sample-metadata{font-size:.92rem;line-height:1.9;color:var(--ink)}
+#sample-metadata p{margin:0;padding:3px 0;border-bottom:1px dashed rgba(64,224,192,.12)}
+
+.form-select{background:rgba(7,31,31,.7);border:1px solid var(--line);color:var(--ink);border-radius:9px;padding:10px 12px}
+.form-select:focus{border-color:var(--accent);box-shadow:0 0 0 .2rem rgba(64,224,192,.2);background:rgba(7,31,31,.9);color:var(--ink)}
+.form-select option{background:#0b2b2b;color:var(--ink)}
+
+.js-plotly-plot,.plotly,.plot-container{width:100%!important}
+
+.app-footer{max-width:1500px;margin:20px auto 0;padding:24px;border-top:1px solid var(--line);
+  text-align:center;color:var(--muted);font-size:.9rem}
+.app-footer p{margin:4px 0}
+
+@media (max-width:768px){
+  .app-header__brand h1{font-size:1.25rem}
+  .toolbar{flex-direction:column;align-items:flex-start}
 }
