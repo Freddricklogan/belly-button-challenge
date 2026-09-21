@@ -1,114 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Belly Button Biodiversity — Interactive Microbiome Dashboard</title>
-    <meta name="description" content="An interactive dashboard exploring the microbial biodiversity of the human navel — bacterial cultures, top operational taxonomic units (OTUs), and demographic context, visualized with D3 and Plotly.">
-    <meta name="author" content="Freddrick Logan">
-    <meta name="theme-color" content="#0b2b2b">
-    <meta property="og:type" content="website">
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b2b2b'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%2340e0c0' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='4' fill='none' stroke='%2340e0c0' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='1.5' fill='%2340e0c0'/%3E%3C/svg%3E">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="static/css/style.css">
-<link rel="canonical" href="https://freddricklogan.github.io/belly-button-challenge/">
-<meta name="robots" content="index, follow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- style-src includes the SHA-256 of the empty string: Plotly appends an empty <style> element and fills it through CSSOM insertRule. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' https://fonts.googleapis.com 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<title>Belly Button Biodiversity — interactive dashboard</title>
+<meta name="description" content="Interactive dashboard over the Belly Button Biodiversity dataset: per-subject top OTUs, bubble and pie charts, wash-frequency gauge, and computed diversity indices with cohort percentiles. By Freddrick Logan.">
 <meta name="author" content="Freddrick Logan">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Freddrick Logan">
-<meta property="og:title" content="Belly Button Biodiversity — Interactive Microbiome Dashboard">
-<meta property="og:description" content="An interactive dashboard exploring the microbial biodiversity of the human navel — bacterial cultures, top operational taxonomic units (OTUs), and demographic context, visualized with D3 and Plotly.">
-<meta property="og:url" content="https://freddricklogan.github.io/belly-button-challenge/">
-<meta property="og:image" content="https://images.unsplash.com/photo-1511447333015-45b65e60f6d5?auto=format&fit=crop&w=1200&h=630&q=80">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Belly Button Biodiversity — Interactive Microbiome Dashboard">
-<meta name="twitter:description" content="An interactive dashboard exploring the microbial biodiversity of the human navel — bacterial cultures, top operational taxonomic units (OTUs), and demographic context, visualized with D3 and Plotly.">
-<meta name="twitter:image" content="https://images.unsplash.com/photo-1511447333015-45b65e60f6d5?auto=format&fit=crop&w=1200&h=630&q=80">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Belly Button Biodiversity \u2014 Interactive Microbiome Dashboard","description":"An interactive dashboard exploring the microbial biodiversity of the human navel \u2014 bacterial cultures, top operational taxonomic units (OTUs), and demographic context, visualized with D3 and Plotly.","url":"https://freddricklogan.github.io/belly-button-challenge/","image":"https://images.unsplash.com/photo-1511447333015-45b65e60f6d5?auto=format&fit=crop&w=1200&h=630&q=80","applicationCategory":"WebApplication","operatingSystem":"Any (Web)","author":{"@type":"Person","name":"Freddrick Logan","url":"https://fredlogan.phd"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<link rel="canonical" href="https://freddricklogan.github.io/belly-button-challenge/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b1220'/%3E%3Ccircle cx='12' cy='13' r='5' fill='%2358a6ff'/%3E%3Ccircle cx='21' cy='19' r='4' fill='%233fb950'/%3E%3Ccircle cx='20' cy='9' r='2.5' fill='%23d29922'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap">
+<link rel="stylesheet" href="src/exec-shell.css">
+<link rel="stylesheet" href="src/app.css">
+<script src="https://cdn.jsdelivr.net/npm/plotly.js-basic-dist-min@4.1.1/plotly-basic.min.js"
+        integrity="sha384-N2HZsG+IG/3J8CwhGGYz/kmzZ0sprpPWwjhor9ZI4lxuf47i9DXK2/NDGxMaJiEb"
+        crossorigin="anonymous"></script>
 </head>
 <body>
-    <header class="app-header">
-        <div class="app-header__inner">
-            <div class="app-header__brand">
-                <svg viewBox="0 0 32 32" width="40" height="40" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#0f3a38"/><circle cx="16" cy="16" r="9" fill="none" stroke="#40e0c0" stroke-width="2"/><circle cx="16" cy="16" r="4" fill="none" stroke="#40e0c0" stroke-width="2"/><circle cx="16" cy="16" r="1.5" fill="#40e0c0"/></svg>
-                <div>
-                    <h1>Belly Button Biodiversity</h1>
-                    <p>Interactive exploration of the human navel microbiome</p>
-                </div>
-            </div>
-            <div class="app-header__meta">
-                <span class="pill">D3.js</span>
-                <span class="pill">Plotly.js</span>
-                <span class="pill">153 samples</span>
-            </div>
-        </div>
-    </header>
-
-    <main class="container-fluid app-main">
-        <div class="toolbar">
-            <p class="toolbar__hint">Select a test subject to explore their microbial profile, or load the full sample set.</p>
-            <div class="toolbar__actions">
-                <button id="loadSampleBtn" class="btn btn-accent">Load Sample Data</button>
-                <div id="loadingIndicator" class="spinner-border text-accent" role="status" style="display: none;">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-            </div>
-        </div>
-
-        <div id="dashboard">
-            <div class="row g-4">
-                <div class="col-lg-3">
-                    <section class="panel">
-                        <div class="panel__head"><h2>Test Subject</h2></div>
-                        <div class="panel__body">
-                            <select id="selDataset" class="form-select" onchange="optionChanged(this.value)"></select>
-                        </div>
-                    </section>
-                    <section class="panel">
-                        <div class="panel__head"><h2>Demographic Info</h2></div>
-                        <div class="panel__body" id="sample-metadata"></div>
-                    </section>
-                    <section class="panel">
-                        <div class="panel__head"><h2>Washing Frequency</h2></div>
-                        <div class="panel__body">
-                            <div id="gauge"></div>
-                        </div>
-                    </section>
-                </div>
-
-                <div class="col-lg-9">
-                    <div class="row g-4">
-                        <div class="col-xl-6">
-                            <section class="panel">
-                                <div class="panel__head"><h2>Top 10 Bacterial Cultures (OTUs)</h2></div>
-                                <div class="panel__body"><div id="bar"></div></div>
-                            </section>
-                        </div>
-                        <div class="col-xl-6">
-                            <section class="panel">
-                                <div class="panel__head"><h2>Sample Distribution</h2></div>
-                                <div class="panel__body"><div id="pie"></div></div>
-                            </section>
-                        </div>
-                    </div>
-                    <section class="panel mt-4">
-                        <div class="panel__head"><h2>Bacteria Cultures per Sample</h2></div>
-                        <div class="panel__body"><div id="bubble"></div></div>
-                    </section>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <footer class="app-footer">
-        <p>Interactive microbiome dashboard &middot; data visualization with D3 &amp; Plotly.</p>
-        <p>Built by <a href="https://github.com/Freddricklogan">Freddrick Logan</a> &middot;
-           <a href="https://github.com/Freddricklogan/belly-button-challenge">Source</a> &middot;
-           <a href="https://www.linkedin.com/in/freddricklogan/">LinkedIn</a></p>
-    </footer>
-
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="static/js/app.js"></script>
+<main id="demo-root" class="exec-main">
+  <div id="chart-notice" class="notice" hidden>Plotly unavailable — statistics, metadata and the gauge still work.</div>
+  <div class="layout">
+    <aside class="stack">
+      <section class="panel" aria-labelledby="h-subject">
+        <h2 id="h-subject">Test subject</h2>
+        <div class="field"><label for="selDataset">Subject ID</label><select id="selDataset"></select></div>
+        <p class="method" id="top-otu">—</p>
+      </section>
+      <section class="panel" aria-labelledby="h-meta">
+        <h2 id="h-meta">Demographic info</h2>
+        <dl class="meta" id="meta"></dl>
+      </section>
+      <section class="panel" aria-labelledby="h-gauge">
+        <h2 id="h-gauge">Wash frequency</h2>
+        <svg class="gauge" id="gauge" viewBox="0 0 200 110" role="img" aria-labelledby="h-gauge gauge-note"></svg>
+        <p class="method" id="gauge-note">—</p>
+      </section>
+    </aside>
+    <div class="stack">
+      <section class="stat-grid" id="stats" aria-label="Sample statistics">
+        <div class="stat stat--accent"><div class="label">Total reads</div><div class="value" id="k-reads">—</div></div>
+        <div class="stat stat--ok"><div class="label">Richness (OTUs)</div><div class="value" id="k-rich">—</div><div class="sub" id="k-rich-sub"></div></div>
+        <div class="stat stat--warn"><div class="label">Shannon H′</div><div class="value" id="k-shannon">—</div><div class="sub" id="k-shannon-sub"></div></div>
+        <div class="stat"><div class="label">Simpson 1−D</div><div class="value" id="k-simpson">—</div></div>
+        <div class="stat"><div class="label">Top OTU share</div><div class="value" id="k-top">—</div></div>
+      </section>
+      <section class="panel"><h3>Top 10 OTUs</h3><div class="plot" id="bar" role="img" aria-label="Horizontal bar chart of the ten most abundant OTUs"></div></section>
+      <section class="panel"><h3>All OTUs by ID and reads</h3><div class="plot plot--tall" id="bubble" role="img" aria-label="Bubble chart of every OTU in the sample"></div></section>
+      <section class="panel"><h3>Top 5 share</h3><div class="plot" id="pie" role="img" aria-label="Pie chart of the five most abundant OTUs"></div></section>
+      <p class="method" id="source-note">—</p>
+    </div>
+  </div>
+</main>
+<script type="module" src="src/main.js"></script>
 </body>
 </html>
