@@ -50,6 +50,7 @@ async function boot() {
   setText('source-note', `Data: Belly Button Biodiversity study samples (Hulcr et al., 2012), as distributed with the Data Visualization bootcamp exercise; ${state.data.names.length} subjects, vendored in data/samples.json so the page does not depend on a third-party bucket.`);
 
   shell = mountExecShell({
+  theme: 'signal',
     title: 'Belly Button Biodiversity',
     tagline: 'The classic interactive-visualization exercise, kept to its scope: pick a subject, see the top ten operational taxonomic units, the full bubble distribution, the top-five pie and the wash-frequency gauge — now with the dataset vendored, the arithmetic tested, and diversity indices computed rather than implied.',
     repo: 'https://github.com/Freddricklogan/belly-button-challenge',
