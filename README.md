@@ -45,7 +45,7 @@ kept; dependencies and correctness fixed.
 flowchart LR
   subgraph TB1["Trust Boundary: the browser (GitHub Pages, static)"]
     DATA[("data/samples.json<br/>153 subjects · vendored")]:::data
-    S["samples.js<br/>validate · otus · summary · percentile (6 tests, 100%)"]:::service
+    S["samples.js<br/>validate · otus · summary · percentile (14 tests, 100%)"]:::service
     MAIN["src/main.js + src/charts.js<br/>select · panels · SVG gauge · Executive Shell"]:::client
   end
   subgraph TB2["Trust Boundary: public CDN"]
